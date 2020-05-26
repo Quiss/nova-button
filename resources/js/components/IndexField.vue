@@ -52,10 +52,51 @@ export default {
         }
     },
     methods: {
+        /**
+         * Returns the closest resource index in the parent tree.
+         *
+         * @return {VueComponent|null}
+         */
+        getResourceIndex() {
+
+            // Walk up the parent tree
+            for(let parent = this.$parent; typeof parent !== 'undefined'; parent = parent.$parent) {
+
+                // Return the eparent if it is a resource index
+                if(parent.$options.name === 'resource-index') {
+                    return parent;
+                }
+
+            }
+
+            // Failed to find resource index
+            return null;
+
+        },
+
+        /**
+         * Updates the index resources.
+         *
+         * @return {void}
+         */
+        updateIndexResources() {
+
+            // Determine the resource index
+            var index = this.getResourceIndex();
+
+            // Stop if we couldn't find the resource index
+            if(index == null) {
+                return;
+            }
+
+            // Call the resource updater
+            index.getResources();
+
+        },
         reload()  {
             if(this.field.reload && queue.allowsReload()) {
                 window.setTimeout(() => {
-                    this.$router.go()
+                    this.updateIndexResources();
                 }, 200)
             }
         },

@@ -1,5 +1,5 @@
 <template>
-  <span v-if="field.visible" :class="ajaxClasses">
+  <span :class="ajaxClasses">
     <span
       ref="novabutton"
       class="nova-button"
